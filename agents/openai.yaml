@@ -1,0 +1,4 @@
+interface:
+  display_name: "JustAI OpenAPI Chat"
+  short_description: "List projects/skills and run JustAI async chat with structured results"
+  default_prompt: "Use $justai-openapi-chat to list available projects or skills when needed, then call the JustAI async chat API and return structured JSON results."
