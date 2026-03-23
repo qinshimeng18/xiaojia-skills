@@ -5,8 +5,8 @@
 目前主要支持：
 - 查询可用资料库
 - 查询可用 skill
-- 发起异步对话
-- 继续已有 `conversation_id`
+- 提交异步对话任务
+- 轮询查询已有 `conversation_id` 的结果
 
 适合这些场景：
 - 营销方案生成
@@ -43,13 +43,20 @@ python3 scripts/list_projects.py
 python3 scripts/list_skills.py
 ```
 
-然后发起一次对话：
+然后先发起一次对话任务：
 
 ```bash
 python3 scripts/chat.py --message "帮我做一份小红书运营方案"
 ```
 
-如果要继续同一轮对话，带上原来的 `conversation_id`：
+拿到 `conversation_id` 之后，再查询结果：
+
+```bash
+python3 scripts/chat_result.py \
+  --conversation-id "your-conversation-id"
+```
+
+如果要继续同一轮对话，还是重新调用 `chat.py`，但要带上原来的 `conversation_id` 和新的 `message`：
 
 ```bash
 python3 scripts/chat.py \
@@ -57,7 +64,7 @@ python3 scripts/chat.py \
   --message "继续"
 ```
 
-如果要限制到某个资料库或指定 skill，可以继续传：
+如果要限制到某个资料库或指定 skill，在提交任务时继续传：
 
 ```bash
 python3 scripts/chat.py \
@@ -68,6 +75,7 @@ python3 scripts/chat.py \
 
 ## 说明
 
-- 这个 skill 走的是 `/openapi/agent/chat_submit` + `/openapi/agent/chat_result`
+- `chat.py` 只负责 `/openapi/agent/chat_submit`
+- `chat_result.py` 只负责 `/openapi/agent/chat_result`
 - `conversation_id` 需要自己保留，用于后续续聊
 - `confirm_info` 这类结果目前还是通过自然语言继续推进，不是结构化表单提交

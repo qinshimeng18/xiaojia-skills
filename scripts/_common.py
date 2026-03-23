@@ -56,11 +56,10 @@ def open_json(request: urllib.request.Request, timeout: int) -> dict:
         raise SystemExit(1)
 
 
-def submit_and_poll(
+def submit_chat(
     message: str,
     conversation_id: str = "",
     timeout: int = DEFAULT_TIMEOUT,
-    poll_interval: int = 2,
     project_ids: list[str] | None = None,
     skill_ids: list[str] | None = None,
 ) -> dict:
@@ -74,20 +73,30 @@ def submit_and_poll(
         submit_payload["skill_id"] = [item for item in skill_ids if item]
 
     submit_request = build_request("/openapi/agent/chat_submit", submit_payload, api_key)
-    submit_result = open_json(submit_request, timeout=timeout)
+    return open_json(submit_request, timeout=timeout)
 
-    conversation_id = submit_result.get("conversation_id", "")
-    if not conversation_id:
-        return submit_result
 
+def get_chat_result(
+    conversation_id: str,
+    timeout: int = DEFAULT_TIMEOUT,
+) -> dict:
+    api_key = get_api_key()
+    result_request = build_request(
+        "/openapi/agent/chat_result",
+        {"conversation_id": conversation_id},
+        api_key,
+    )
+    return open_json(result_request, timeout=timeout)
+
+
+def poll_chat_result(
+    conversation_id: str,
+    timeout: int = DEFAULT_TIMEOUT,
+    poll_interval: int = 2,
+) -> dict:
     start_time = time.time()
     while True:
-        result_request = build_request(
-            "/openapi/agent/chat_result",
-            {"conversation_id": conversation_id},
-            api_key,
-        )
-        result = open_json(result_request, timeout=timeout)
+        result = get_chat_result(conversation_id=conversation_id, timeout=timeout)
         status = result.get("status", "")
         if status in {"completed", "failed"}:
             return result

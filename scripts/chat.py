@@ -2,11 +2,11 @@
 import argparse
 import json
 import os
-from _common import DEFAULT_TIMEOUT, submit_and_poll
+from _common import DEFAULT_TIMEOUT, submit_chat
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Call the JustAI openapi chat endpoint.")
+    parser = argparse.ArgumentParser(description="Submit a task to the JustAI openapi chat endpoint.")
     parser.add_argument("--message", required=True, help="User message to send.")
     parser.add_argument("--conversation-id", default="", help="Existing conversation id to continue.")
     parser.add_argument(
@@ -14,12 +14,6 @@ def main() -> int:
         type=int,
         default=int(os.environ.get("JUSTAI_OPENAPI_TIMEOUT", DEFAULT_TIMEOUT)),
         help="HTTP timeout in seconds. Defaults to JUSTAI_OPENAPI_TIMEOUT or 300.",
-    )
-    parser.add_argument(
-        "--poll-interval",
-        type=int,
-        default=2,
-        help="Polling interval in seconds for chat_result. Defaults to 2.",
     )
     parser.add_argument(
         "--project-id",
@@ -35,16 +29,15 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    result = submit_and_poll(
+    result = submit_chat(
         message=args.message,
         conversation_id=args.conversation_id,
         timeout=args.timeout,
-        poll_interval=args.poll_interval,
         project_ids=args.project_id,
         skill_ids=args.skill_id,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 0 if result.get("status") == "completed" else 1
+    return 0 if result.get("status") in {"accepted", "running"} else 1
 
 
 if __name__ == "__main__":
