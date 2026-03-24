@@ -16,35 +16,15 @@
 
 ## 安装方式
 
-### Claude Code
-
-个人级安装：
+推荐直接使用 `npx skills add`：
 
 ```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/qinshimeng18/xiaojia-skills.git /tmp/xiaojia-skills
-cp -R /tmp/xiaojia-skills/skills/justai-openapi-chat ~/.claude/skills/
+npx skills add https://github.com/qinshimeng18/xiaojia-skills --skill justai-openapi-chat
 ```
 
-项目级安装：
+安装后重启 Claude Code、Codex 或兼容的 skills 运行环境。
 
-```bash
-mkdir -p .claude/skills
-git clone https://github.com/qinshimeng18/xiaojia-skills.git /tmp/xiaojia-skills
-cp -R /tmp/xiaojia-skills/skills/justai-openapi-chat .claude/skills/
-```
-
-安装后重启 Claude Code，skill 会以 `/justai-openapi-chat` 的形式可用。
-
-### Codex
-
-```bash
-mkdir -p ~/.codex/skills
-git clone https://github.com/qinshimeng18/xiaojia-skills.git /tmp/xiaojia-skills
-cp -R /tmp/xiaojia-skills/skills/justai-openapi-chat ~/.codex/skills/
-```
-
-安装后重启 Codex。
+如果当前环境不支持 `npx skills add`，也可以手动复制 `skills/justai-openapi-chat` 目录到本地 skills 目录。
 
 ## 前置要求
 
