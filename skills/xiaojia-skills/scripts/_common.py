@@ -62,15 +62,23 @@ def submit_chat(
     timeout: int = DEFAULT_TIMEOUT,
     project_ids: list[str] | None = None,
     skill_ids: list[str] | None = None,
+    form_id: str = "",
+    form_data: dict | None = None,
 ) -> dict:
     api_key = get_api_key()
-    submit_payload = {"message": message}
+    submit_payload = {}
+    if message:
+        submit_payload["message"] = message
     if conversation_id:
         submit_payload["conversation_id"] = conversation_id
     if project_ids:
         submit_payload["project_id"] = [item for item in project_ids if item]
     if skill_ids:
         submit_payload["skill_id"] = [item for item in skill_ids if item]
+    if form_id:
+        submit_payload["form_id"] = form_id
+    if form_data:
+        submit_payload["form_data"] = form_data
 
     submit_request = build_request("/openapi/agent/chat_submit", submit_payload, api_key)
     return open_json(submit_request, timeout=timeout)
