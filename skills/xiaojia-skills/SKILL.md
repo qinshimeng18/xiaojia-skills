@@ -1,10 +1,10 @@
 ---
-name: justai-openapi-chat
+name: xiaojia-skills
 description: Call the JustAI openapi async chat endpoints and return structured JSON results. Use when Codex needs to invoke the deployed JustAI agent for marketing plans, Xiaohongshu notes, image generation, collect-info turns, confirm-info card generation, or follow-up turns through `/openapi/agent/chat_submit` and `/openapi/agent/chat_result` instead of reasoning locally.
 allowed-tools: Bash
 ---
 
-# JustAI OpenAPI Chat
+# Xiaojia Skills
 
 Use the bundled scripts to inspect available projects and skills, then call the deployed JustAI openapi endpoint in two steps:
 

@@ -1,4 +1,4 @@
 interface:
-  display_name: "JustAI OpenAPI Chat"
+  display_name: "Xiaojia Skills"
   short_description: "List projects/skills and run JustAI async chat with structured results"
-  default_prompt: "Use $justai-openapi-chat to list available projects or skills when needed, then call the JustAI async chat API and return structured JSON results."
+  default_prompt: "Use $xiaojia-skills to list available projects or skills when needed, then call the JustAI async chat API and return structured JSON results."

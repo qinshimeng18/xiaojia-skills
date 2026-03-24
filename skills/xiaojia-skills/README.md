@@ -1,4 +1,4 @@
-# justai-openapi-chat
+# xiaojia-skills
 
 一个基于 JustAI OpenAPI 的 skill，可以安装到 Claude Code 或 Codex，用来调用线上 Agent 能力，而不是在本地直接推理。
 
@@ -19,12 +19,12 @@
 推荐直接使用 `npx skills add`：
 
 ```bash
-npx skills add https://github.com/qinshimeng18/xiaojia-skills --skill justai-openapi-chat
+npx skills add https://github.com/qinshimeng18/xiaojia-skills --skill xiaojia-skills
 ```
 
 安装后重启 Claude Code、Codex 或兼容的 skills 运行环境。
 
-如果当前环境不支持 `npx skills add`，也可以手动复制 `skills/justai-openapi-chat` 目录到本地 skills 目录。
+如果当前环境不支持 `npx skills add`，也可以手动复制 `skills/xiaojia-skills` 目录到本地 skills 目录。
 
 ## 前置要求
 
