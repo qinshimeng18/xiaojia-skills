@@ -28,17 +28,23 @@ npx skills add https://github.com/qinshimeng18/xiaojia-skills --skill xiaojia-sk
 
 ## 前置要求
 
-使用前需要先配置环境变量：
+默认会请求生产地址 `https://justailab.com`，所以最少只需要配置：
 
 ```bash
-export JUSTAI_OPENAPI_BASE_URL="https://your-domain"
 export JUSTAI_OPENAPI_API_KEY="your-api-key"
 ```
 
-可选：
+可选覆盖：
 
 ```bash
+export JUSTAI_OPENAPI_BASE_URL="https://justailab.com"
 export JUSTAI_OPENAPI_TIMEOUT="300"
+```
+
+如果你要切到别的环境，再额外设置：
+
+```bash
+export JUSTAI_OPENAPI_BASE_URL="https://your-domain"
 ```
 
 ## 最短使用方式

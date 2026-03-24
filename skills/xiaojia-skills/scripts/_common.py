@@ -8,6 +8,7 @@ import urllib.request
 
 
 DEFAULT_TIMEOUT = 300
+DEFAULT_BASE_URL = "https://justailab.com"
 
 
 def require_env(name: str) -> str:
@@ -18,7 +19,7 @@ def require_env(name: str) -> str:
 
 
 def get_base_url() -> str:
-    return require_env("JUSTAI_OPENAPI_BASE_URL").rstrip("/")
+    return os.environ.get("JUSTAI_OPENAPI_BASE_URL", DEFAULT_BASE_URL).strip().rstrip("/")
 
 
 def get_api_key() -> str:

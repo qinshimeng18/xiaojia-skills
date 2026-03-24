@@ -20,8 +20,8 @@ When running inside Claude Code, `${CLAUDE_SKILL_DIR}` resolves to this skill di
 ## Workflow
 
 1. Ensure these environment variables are set before using the script:
-   - `JUSTAI_OPENAPI_BASE_URL`
    - `JUSTAI_OPENAPI_API_KEY`
+   - Optional override: `JUSTAI_OPENAPI_BASE_URL` (defaults to `https://justailab.com`)
    - Optional: `JUSTAI_OPENAPI_TIMEOUT`
 2. If the task should be scoped to a specific资料库, run `scripts/list_projects.py` first and choose one or more `project_id`.
 3. If the task should preload a specific skill, run `scripts/list_skills.py` first and choose one or more `skill_id`.
