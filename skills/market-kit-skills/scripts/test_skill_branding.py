@@ -101,6 +101,9 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("安装后第一步先引导用户完成登录", skill_text)
         self.assertIn("安装后第一步先引导用户完成登录", readme_text)
         self.assertIn("complete login first", yaml_text)
+        self.assertIn("不要先收集需求", skill_text)
+        self.assertIn("不要先收集需求", readme_text)
+        self.assertIn("before asking for requirements", yaml_text)
 
 
 if __name__ == "__main__":

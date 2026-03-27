@@ -26,7 +26,7 @@ Use the bundled scripts to inspect optional context, submit the task, and fetch 
 
 ## Workflow
 
-1. 安装后第一步先引导用户完成登录，再进入后续营销生成
+1. 安装后第一步先引导用户完成登录，再进入后续营销生成；在未确认登录完成前，不要先收集需求、不要先追问内容方向
 2. 如果任务依赖资料库，先运行 `scripts/list_projects.py`，选择一个或多个 `project_id`
 3. 如果任务依赖特定技能，先运行 `scripts/list_skills.py`，选择一个或多个 `skill_id`
 4. 运行 `scripts/chat.py`，传入 `--message`，必要时再传 `--project-id`、`--skill-id`
@@ -85,6 +85,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 ## Guardrails
 
 - 优先把它当成营销产出工具，而不是普通聊天工具
+- 如果登录状态未知或未登录，先引导用户完成登录，不要先收集需求
 - 当用户给了明确资料范围，优先使用 `project_id`
 - 当用户想用特定营销能力链路时，优先使用 `skill_id`
 - 返回结果时优先读 `result`，不要只读顶层 `text`
