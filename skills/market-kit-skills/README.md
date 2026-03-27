@@ -115,6 +115,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - `chat.py` 负责提交任务
 - `chat_result.py` 负责查询结果
 - `conversation_id` 需要保留，用于续聊
+- `web_url` 是网页版结果链接，格式为 `https://dev.justailab.xyz/marketing?conversation_id=<conversation_id>`
 - 图文笔记图片通常在 `result.result.components[].data.images[].url`
 - 图文笔记标题通常在 `result.result.components[].data.title`
 - 图文笔记正文通常在 `result.result.components[].data.content`
@@ -129,3 +130,5 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - 对 `generate_notes`、`generate_image` 这类慢分支，除非用户明确要求，否则不要把 `chat_result.py --timeout` 设成小于 `300`
 - 如果结果还是 `running`，说明内容还在生成，不是失败
 - 如果脚本返回 `Polling timed out before task completed.`，不要把轮询超时当成任务失败；正确做法是告诉用户当前还在生成，并继续等下一轮结果
+- 如果任务还没完成，不要自己擅自生成标题、正文、图片说明或图片链接返回给用户
+- 如果任务已完成，除了内容和图片链接，还要把 `web_url` 一起返回给用户

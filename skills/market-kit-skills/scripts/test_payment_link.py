@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import unittest
 
-from _common import get_marketing_payment_url
+from _common import build_marketing_conversation_url, get_marketing_payment_url
 
 
 class MarketingPaymentUrlTests(unittest.TestCase):
@@ -9,6 +9,12 @@ class MarketingPaymentUrlTests(unittest.TestCase):
         self.assertEqual(
             get_marketing_payment_url(),
             "https://dev.justailab.xyz/marketing",
+        )
+
+    def test_builds_marketing_conversation_url(self):
+        self.assertEqual(
+            build_marketing_conversation_url("c7d34bf0-0bd5-4b2c-acd2-5dc2adf729b9"),
+            "https://dev.justailab.xyz/marketing?conversation_id=c7d34bf0-0bd5-4b2c-acd2-5dc2adf729b9",
         )
 
 

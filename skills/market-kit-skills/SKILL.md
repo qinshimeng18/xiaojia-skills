@@ -40,6 +40,7 @@ Use the bundled scripts to inspect optional context, submit the task, and fetch 
 - `result` 是首选的结构化结果
 - `text` 只作为兜底摘要
 - `conversation_id` 必须保留，用于后续续聊
+- `web_url` 是网页版结果链接，格式为 `https://dev.justailab.xyz/marketing?conversation_id=<conversation_id>`
 - 图文笔记需要同时返回标题、文案和图片链接
 - 图文笔记图片通常在 `result.result.components[].data.images[].url`
 - 图文笔记标题通常在 `result.result.components[].data.title`
@@ -89,4 +90,5 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - 如果 `chat_result.py` 还在输出 `status=running`，说明营销内容仍在生成，不能过早判断“没有图片”或“没有结果”
 - 对 `generate_notes`、`generate_image` 这类慢分支，除非用户明确要求，否则不要把 `chat_result.py --timeout` 设成小于 `300`
 - 如果脚本返回 `Polling timed out before task completed.`，不要把轮询超时当成任务失败；这通常表示当前轮询窗口不够长，任务仍可能在后台继续生成
-- 当状态是 `running` 或出现轮询超时时，应明确告诉用户“还在生成”，而不是直接补一版手写稿冒充最终结果
+- 当状态是 `running` 或出现轮询超时时，应明确告诉用户“还在生成”，不要自己擅自生成标题、正文、图片说明或图片链接冒充最终结果
+- 当结果已完成时，返回内容、图片链接之外，还要一并返回 `web_url`

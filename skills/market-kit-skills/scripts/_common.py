@@ -329,6 +329,10 @@ def get_marketing_payment_url() -> str:
     return MARKETING_PAYMENT_URL
 
 
+def build_marketing_conversation_url(conversation_id: str) -> str:
+    return f"{get_marketing_payment_url()}?conversation_id={conversation_id}"
+
+
 def build_request(path: str, payload: dict, api_key: str) -> urllib.request.Request:
     headers = {
         "Content-Type": "application/json",

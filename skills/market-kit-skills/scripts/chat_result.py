@@ -2,7 +2,7 @@
 import argparse
 import json
 import sys
-from _common import get_default_timeout, poll_chat_result
+from _common import build_marketing_conversation_url, get_default_timeout, poll_chat_result
 
 
 def main() -> int:
@@ -39,6 +39,9 @@ def main() -> int:
         poll_interval=args.poll_interval,
         progress_callback=on_progress,
     )
+    conversation_id = str(result.get("conversation_id", "") or "")
+    if conversation_id:
+        result["web_url"] = build_marketing_conversation_url(conversation_id)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if result.get("status") == "completed" else 1
 

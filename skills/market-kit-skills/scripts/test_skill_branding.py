@@ -63,6 +63,22 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("不要把轮询超时当成任务失败", readme_text)
         self.assertIn("timeout", yaml_text.lower())
 
+    def test_skill_docs_forbid_fabricating_results_and_require_web_url(self):
+        skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
+        readme = Path(__file__).resolve().parents[1] / "README.md"
+        openai_yaml = Path(__file__).resolve().parents[1] / "agents" / "openai.yaml"
+
+        skill_text = skill_md.read_text(encoding="utf-8")
+        readme_text = readme.read_text(encoding="utf-8")
+        yaml_text = openai_yaml.read_text(encoding="utf-8")
+
+        self.assertIn("不要自己擅自生成", skill_text)
+        self.assertIn("不要自己擅自生成", readme_text)
+        self.assertIn("still generating", yaml_text)
+        self.assertIn("web_url", skill_text)
+        self.assertIn("web_url", readme_text)
+        self.assertIn("conversation_id", yaml_text)
+
 
 if __name__ == "__main__":
     unittest.main()
