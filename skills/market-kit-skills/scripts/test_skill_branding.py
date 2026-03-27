@@ -78,6 +78,16 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("web_url", skill_text)
         self.assertIn("web_url", readme_text)
         self.assertIn("conversation_id", yaml_text)
+        self.assertIn("https://justailab.com/marketing", skill_text)
+        self.assertIn("https://justailab.com/marketing", readme_text)
+        self.assertIn("https://justailab.com/marketing", yaml_text)
+
+    def test_internal_prompt_uses_agent_market_not_agent_default(self):
+        openai_yaml = Path(__file__).resolve().parents[1] / "agents" / "openai.yaml"
+        yaml_text = openai_yaml.read_text(encoding="utf-8")
+
+        self.assertIn("agent_market", yaml_text)
+        self.assertNotIn("agent_default", yaml_text)
 
 
 if __name__ == "__main__":

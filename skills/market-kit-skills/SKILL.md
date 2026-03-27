@@ -40,7 +40,7 @@ Use the bundled scripts to inspect optional context, submit the task, and fetch 
 - `result` 是首选的结构化结果
 - `text` 只作为兜底摘要
 - `conversation_id` 必须保留，用于后续续聊
-- `web_url` 是网页版结果链接，格式为 `https://dev.justailab.xyz/marketing?conversation_id=<conversation_id>`
+- `web_url` 是网页版结果链接，格式为 `https://justailab.com/marketing?conversation_id=<conversation_id>`
 - 图文笔记需要同时返回标题、文案和图片链接
 - 图文笔记图片通常在 `result.result.components[].data.images[].url`
 - 图文笔记标题通常在 `result.result.components[].data.title`

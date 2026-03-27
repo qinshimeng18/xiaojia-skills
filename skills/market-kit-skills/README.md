@@ -115,7 +115,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - `chat.py` 负责提交任务
 - `chat_result.py` 负责查询结果
 - `conversation_id` 需要保留，用于续聊
-- `web_url` 是网页版结果链接，格式为 `https://dev.justailab.xyz/marketing?conversation_id=<conversation_id>`
+- `web_url` 是网页版结果链接，格式为 `https://justailab.com/marketing?conversation_id=<conversation_id>`
 - 图文笔记图片通常在 `result.result.components[].data.images[].url`
 - 图文笔记标题通常在 `result.result.components[].data.title`
 - 图文笔记正文通常在 `result.result.components[].data.content`
