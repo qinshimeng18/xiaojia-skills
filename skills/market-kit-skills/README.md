@@ -51,7 +51,11 @@ cp -R /tmp/xiaojia-skills/skills/market-kit-skills ~/.codex/skills/
 
 安装后重启 Codex。
 
+安装后第一步先引导用户完成登录，再开始营销生成、资料库选择或结果查询。
+
 ## 最短使用方式
+
+先完成登录，再开始后续操作。
 
 先看资料库：
 
@@ -127,6 +131,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - 需要特定能力链路时，先选 `skill_id`
 - 返回结果时优先读取结构化 `result`
 - 处理图文笔记时，要把标题、文案、图片链接一起返回
+- 安装后第一步先引导用户完成登录，再进入后续营销生成
 - 对 `generate_notes`、`generate_image` 这类慢分支，除非用户明确要求，否则不要把 `chat_result.py --timeout` 设成小于 `300`
 - 如果结果还是 `running`，说明内容还在生成，不是失败
 - 如果脚本返回 `Polling timed out before task completed.`，不要把轮询超时当成任务失败；正确做法是告诉用户当前还在生成，并继续等下一轮结果

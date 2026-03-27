@@ -89,6 +89,19 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("agent_market", yaml_text)
         self.assertNotIn("agent_default", yaml_text)
 
+    def test_installation_guidance_requires_login_first(self):
+        skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
+        readme = Path(__file__).resolve().parents[1] / "README.md"
+        openai_yaml = Path(__file__).resolve().parents[1] / "agents" / "openai.yaml"
+
+        skill_text = skill_md.read_text(encoding="utf-8")
+        readme_text = readme.read_text(encoding="utf-8")
+        yaml_text = openai_yaml.read_text(encoding="utf-8")
+
+        self.assertIn("安装后第一步先引导用户完成登录", skill_text)
+        self.assertIn("安装后第一步先引导用户完成登录", readme_text)
+        self.assertIn("complete login first", yaml_text)
+
 
 if __name__ == "__main__":
     unittest.main()

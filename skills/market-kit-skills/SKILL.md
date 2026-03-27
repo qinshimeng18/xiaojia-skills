@@ -26,13 +26,14 @@ Use the bundled scripts to inspect optional context, submit the task, and fetch 
 
 ## Workflow
 
-1. 如果任务依赖资料库，先运行 `scripts/list_projects.py`，选择一个或多个 `project_id`
-2. 如果任务依赖特定技能，先运行 `scripts/list_skills.py`，选择一个或多个 `skill_id`
-3. 运行 `scripts/chat.py`，传入 `--message`，必要时再传 `--project-id`、`--skill-id`
-4. 保留返回的 `conversation_id`
-5. 运行 `scripts/chat_result.py --conversation-id ...` 获取结果
-6. 如果用户要继续同一轮创作，复用原来的 `conversation_id`
-7. 如果是 `confirm_info`，可以继续发送自然语言修订，也可以通过 `form_id + form_data` 结构化续跑
+1. 安装后第一步先引导用户完成登录，再进入后续营销生成
+2. 如果任务依赖资料库，先运行 `scripts/list_projects.py`，选择一个或多个 `project_id`
+3. 如果任务依赖特定技能，先运行 `scripts/list_skills.py`，选择一个或多个 `skill_id`
+4. 运行 `scripts/chat.py`，传入 `--message`，必要时再传 `--project-id`、`--skill-id`
+5. 保留返回的 `conversation_id`
+6. 运行 `scripts/chat_result.py --conversation-id ...` 获取结果
+7. 如果用户要继续同一轮创作，复用原来的 `conversation_id`
+8. 如果是 `confirm_info`，可以继续发送自然语言修订，也可以通过 `form_id + form_data` 结构化续跑
 
 ## Result Rules
 
