@@ -1,10 +1,20 @@
 # Market Kit Skills
 
+![AI Skill](https://img.shields.io/badge/AI%20Skill-Marketing-black)
+![Xiaohongshu Ready](https://img.shields.io/badge/Xiaohongshu-Ready-red)
+![Campaign Planning](https://img.shields.io/badge/Campaign-Planning-blue)
+![GitHub Install](https://img.shields.io/badge/Install-From%20GitHub-success)
+![Agent Ready](https://img.shields.io/badge/Ready%20for-Agents-orange)
+![Web Result](https://img.shields.io/badge/Web%20Result-justailab.com-6f42c1)
+
 把营销需求直接推进成可交付结果的 AI skill。
 
 `Market Kit Skills` 不是一个只会陪你聊天的通用助手。它面向真实营销场景设计，目标很直接：把你脑子里的想法、你手里的资料、你已有的上下文，推进成更接近可发布状态的营销方案、小红书图文笔记、卖点表达、内容方向和营销图片。
 
 如果你要的是“给我一个结果”，而不是“我们先泛泛聊聊”，这就是为你准备的 skill。
+
+> [!TIP]
+> 这不是一个泛用聊天 prompt，而是一条面向营销交付的生产链路。它的价值在于持续生成、持续迭代、持续追踪，而不是临时写一段漂亮话。
 
 ## 为什么它很强
 
@@ -12,11 +22,13 @@
 
 `Market Kit Skills` 的强，不在于它能说得多花，而在于它能把整条营销生成链路打通：
 
-- 能出营销方案，也能出内容方向和 campaign plan
-- 能出小红书图文笔记，不只是标题，还包括正文和配图
-- 能基于资料库生成参考驱动内容，而不是脱离事实乱写
-- 能在已有方案、资料卡和会话上继续迭代，不用每次从头来
-- 能同时返回内容、图片链接和网页版结果链接，方便继续追踪和复用
+| 能力 | 结果 |
+| --- | --- |
+| 营销方案生成 | 输出 campaign plan、内容规划、营销方向 |
+| 小红书图文生成 | 产出标题、正文、图片和图文结构 |
+| 参考资料驱动 | 基于资料库生成，不脱离事实乱写 |
+| 会话内持续迭代 | 在已有方案、资料卡和会话上继续改写 |
+| 结果可追踪 | 同时返回内容、图片链接和网页版结果链接 |
 
 你拿到的不只是一个回答，而是一份可以继续推进、继续修改、继续交付的营销结果。
 
@@ -30,21 +42,24 @@
 
 ## 它能直接做什么
 
-- 生成营销方案、内容规划和 campaign plan
-- 生成小红书图文笔记、标题、正文和配图
-- 提炼人群、卖点、定位和差异化表达
-- 基于资料库生成参考驱动的营销内容
-- 生成营销图片，以及图文一体的结果
-- 围绕同一条会话继续改写、补充、扩展和追问
+| 场景 | 直接产出 |
+| --- | --- |
+| 新品营销 | 营销方案、campaign plan、内容方向 |
+| 小红书运营 | 小红书图文笔记、标题、正文、配图 |
+| 品牌表达 | 人群、卖点、定位、差异化表达 |
+| 内容提案 | 基于资料库生成参考驱动内容 |
+| 创意延展 | 生成营销图片和图文一体的结果 |
+| 持续优化 | 围绕同一条会话继续改写、补充、扩展和追问 |
 
 ## 典型交付物
 
-- 新品上线营销方案
-- 品牌种草内容方向
-- 小红书种草图文笔记
-- 人群与卖点拆解
-- 资料驱动的内容提案
-- 文案 + 图片 + 网页版结果的完整营销内容
+| 类型 | 示例 |
+| --- | --- |
+| 营销方案 | 新品上线营销方案、品牌 campaign plan |
+| 内容交付 | 小红书种草图文笔记、品牌种草内容方向 |
+| 策略拆解 | 人群洞察、卖点提炼、定位表达 |
+| 参考驱动内容 | 基于资料库的内容提案、选题建议 |
+| 图文一体结果 | 文案 + 图片 + 网页版结果的完整营销内容 |
 
 ## 为什么和普通 AI 不一样
 
@@ -71,11 +86,17 @@ skill 名称：
 market-kit-skills
 ```
 
+> [!NOTE]
+> 安装方式就是这么简单。把仓库地址给 Agent，然后说“帮我安装 `market-kit-skills`”就够了。
+
 ## 首次使用
 
 安装后第一步先引导用户完成登录，再开始营销生成、资料库选择或结果查询。在未确认登录完成前，不要先收集需求、不要先追问笔记方向。
 
 这条规则必须严格执行。因为这套 skill 的价值在于调用真实的营销生成链路，而不是在未完成登录时先本地即兴编一版内容糊弄过去。
+
+> [!WARNING]
+> 安装后第一步先引导用户完成登录。不要先收集需求，不要先追问笔记方向，也不要在未登录时直接编一版内容返回。
 
 ## 推荐工作流
 
@@ -85,38 +106,31 @@ market-kit-skills
 
 ### 2. 查看资料库
 
-```bash
-python3 "${CLAUDE_SKILL_DIR}/scripts/list_projects.py"
-```
-
 ### 3. 查看可选能力链路
-
-```bash
-python3 "${CLAUDE_SKILL_DIR}/scripts/list_skills.py"
-```
 
 ### 4. 提交营销任务
 
-```bash
-python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" --message "帮我做一份护肤品牌新品营销方案"
-```
-
 ### 5. 查询结果
-
-```bash
-python3 "${CLAUDE_SKILL_DIR}/scripts/chat_result.py" \
-  --conversation-id "your-conversation-id"
-```
 
 ### 6. 在同一轮结果上继续迭代
 
+<details>
+<summary>展开查看常用命令</summary>
+
 ```bash
-python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
-  --conversation-id "your-conversation-id" \
-  --message "继续扩写成适合小红书发布的图文笔记"
+python3 "${CLAUDE_SKILL_DIR}/scripts/list_projects.py"
+python3 "${CLAUDE_SKILL_DIR}/scripts/list_skills.py"
+python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" --message "帮我做一份护肤品牌新品营销方案"
+python3 "${CLAUDE_SKILL_DIR}/scripts/chat_result.py" --conversation-id "your-conversation-id"
+python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" --conversation-id "your-conversation-id" --message "继续扩写成适合小红书发布的图文笔记"
 ```
 
+</details>
+
 ## 常用玩法
+
+<details>
+<summary>展开查看进阶调用方式</summary>
 
 限定资料库，做参考驱动内容：
 
@@ -142,15 +156,19 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
   --message "这些信息没问题，继续生成方案"
 ```
 
+</details>
+
 ## 结果会返回什么
 
-- `chat.py` 负责提交任务
-- `chat_result.py` 负责查询结果
-- `conversation_id` 需要保留，用于续聊和后续追踪
-- `web_url` 是网页版结果链接，格式为 `https://justailab.com/marketing?conversation_id=<conversation_id>`
-- 小红书图文笔记图片通常在 `result.result.components[].data.images[].url`
-- 小红书图文笔记标题通常在 `result.result.components[].data.title`
-- 小红书图文笔记正文通常在 `result.result.components[].data.content`
+| 字段 | 说明 |
+| --- | --- |
+| `chat.py` | 负责提交任务 |
+| `chat_result.py` | 负责查询结果 |
+| `conversation_id` | 需要保留，用于续聊和后续追踪 |
+| `web_url` | 网页版结果链接，格式为 `https://justailab.com/marketing?conversation_id=<conversation_id>` |
+| `result.result.components[].data.images[].url` | 小红书图文笔记图片 |
+| `result.result.components[].data.title` | 小红书图文笔记标题 |
+| `result.result.components[].data.content` | 小红书图文笔记正文 |
 
 ## 结果判断规则
 
@@ -159,6 +177,9 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - 对 `generate_notes`、`generate_image` 这类慢分支，除非用户明确要求，否则不要把 `chat_result.py --timeout` 设成小于 `300`
 - 如果任务还没完成，不要自己擅自生成标题、正文、图片说明或图片链接返回给用户
 - 如果任务已完成，除了内容和图片链接，还要把 `web_url` 一起返回给用户
+
+> [!IMPORTANT]
+> `running` 不是失败，`Polling timed out before task completed.` 也不是失败。真正正确的做法，是告诉用户内容还在生成，并在完成后返回内容、图片链接和 `web_url`。
 
 ## 最佳实践
 
