@@ -6,7 +6,7 @@
 
 ## 这是什么
 
-这是一个可以安装到 Claude Code 或 Codex 的营销 skill，适合在以下场景里直接产出结果：
+这是一个可以安装到任意支持 GitHub skill 安装的 AI Agent 里的营销 skill，适合在以下场景里直接产出结果：
 
 - 输出营销方案、内容规划和 campaign plan
 - 生成小红书图文笔记、标题、正文和配图
@@ -34,35 +34,29 @@
 
 ## 安装方式
 
-### Claude Code
+安装不需要手动折腾目录、复制文件或者写一堆命令。
 
-个人级安装：
+只要你的 Agent 支持从 GitHub 安装 skill，直接把这个仓库地址发给它，再告诉它安装 `market-kit-skills` 就可以：
 
-```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/qinshimeng18/xiaojia-skills.git /tmp/xiaojia-skills
-cp -R /tmp/xiaojia-skills/skills/market-kit-skills ~/.claude/skills/
+```text
+仓库地址：
+https://github.com/qinshimeng18/xiaojia-skills
+
+安装目标：
+market-kit-skills
 ```
 
-项目级安装：
+一句最简单的话术就是：
 
-```bash
-mkdir -p .claude/skills
-git clone https://github.com/qinshimeng18/xiaojia-skills.git /tmp/xiaojia-skills
-cp -R /tmp/xiaojia-skills/skills/market-kit-skills .claude/skills/
+```text
+请帮我从这个仓库安装 skill：
+https://github.com/qinshimeng18/xiaojia-skills
+
+我要安装的 skill 是：
+market-kit-skills
 ```
 
-安装后重启 Claude Code，skill 会以 `/market-kit-skills` 的形式可用。
-
-### Codex
-
-```bash
-mkdir -p ~/.codex/skills
-git clone https://github.com/qinshimeng18/xiaojia-skills.git /tmp/xiaojia-skills
-cp -R /tmp/xiaojia-skills/skills/market-kit-skills ~/.codex/skills/
-```
-
-安装后重启 Codex。
+如果你的 Agent 支持 skill 市场、GitHub skill 安装，或者支持把仓库里的指定 skill 安装到本地，这种方式都适用。
 
 ## 首次使用
 
