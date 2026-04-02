@@ -293,13 +293,14 @@ class SkillBrandingTests(unittest.TestCase):
         readme_text = readme.read_text(encoding="utf-8")
         yaml_text = openai_yaml.read_text(encoding="utf-8")
 
-        self.assertIn("先自行检查当前登录状态，不要先问用户是否已经登录", skill_text)
-        self.assertIn("先自行检查当前登录状态，不要先问用户是否已经登录", readme_text)
-        self.assertIn("check login state directly", yaml_text.lower())
+        self.assertIn("先静默完成登录检查，不要把登录状态确认问题抛给用户", skill_text)
+        self.assertIn("先静默完成登录检查，不要把登录状态确认问题抛给用户", readme_text)
+        self.assertIn("perform a silent login check first", yaml_text.lower())
         self.assertIn("不要先收集需求", skill_text)
         self.assertIn("也不会急着让你填一堆需求", readme_text)
-        self.assertIn("before asking for requirements", yaml_text)
+        self.assertIn("before asking for requirements", yaml_text.lower())
         self.assertIn("do not ask the user whether they are logged in", yaml_text.lower())
+        self.assertIn("never ask the user to confirm login state", yaml_text.lower())
 
     def test_login_guidance_explains_automatic_api_key_setup(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
@@ -329,12 +330,12 @@ class SkillBrandingTests(unittest.TestCase):
         readme_text = readme.read_text(encoding="utf-8")
         yaml_text = openai_yaml.read_text(encoding="utf-8")
 
-        self.assertIn("如果已经登录，直接继续后续营销任务", skill_text)
-        self.assertIn("如果还没有登录，直接进入登录流程", skill_text)
-        self.assertIn("如果已经登录，就直接继续使用，不会再反复要求你登录", readme_text)
-        self.assertIn("如果还没有登录，我们会直接处理登录流程", readme_text)
-        self.assertIn("if login is already complete, continue immediately", yaml_text.lower())
-        self.assertIn("if login is not complete, start the login step directly", yaml_text.lower())
+        self.assertIn("如果登录检查通过，直接继续后续营销任务，不要再和用户确认登录", skill_text)
+        self.assertIn("如果登录检查失败或确认未登录，再进入登录流程", skill_text)
+        self.assertIn("如果登录检查通过，就直接继续使用，不会再反复要求你确认是否登录", readme_text)
+        self.assertIn("只有登录检查失败或确认未登录，我们才会让你进入登录流程", readme_text)
+        self.assertIn("if the login check passes, continue immediately without mentioning login", yaml_text.lower())
+        self.assertIn("only if the login check fails or clearly shows the user is not logged in should you start the login step", yaml_text.lower())
         self.assertNotIn("If the user is not logged in or the login state is still unknown, guide them through login first", yaml_text)
 
 
