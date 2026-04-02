@@ -36,18 +36,18 @@
 
 ## 安装方式
 
-安装方式很简单：把这个 GitHub 仓库地址发给你的 Agent，然后告诉它帮你安装 `xiaojia-Marketing-Delivery` 就可以。
+安装方式很简单：把这个独立 skill 仓库地址发给你的 Agent，然后告诉它帮你安装 `xiaojia-Marketing-Delivery` 就可以。
 
 ```text
 请帮我安装这个 skill：
-https://github.com/qinshimeng18/xiaojia-skills
+https://github.com/qinshimeng18/xiaojia-Marketing-Delivery
 
 skill 名称：
 xiaojia-Marketing-Delivery
 ```
 
 > [!NOTE]
-> 安装方式就是一句话：把仓库地址给 Agent，然后说“帮我安装 `xiaojia-Marketing-Delivery`”。
+> 安装方式就是一句话：把这个独立 skill 仓库地址给 Agent，然后说“帮我安装 `xiaojia-Marketing-Delivery`”。
 
 ## 进一步了解
 

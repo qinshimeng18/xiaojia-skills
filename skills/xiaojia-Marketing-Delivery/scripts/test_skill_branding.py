@@ -19,6 +19,36 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("metadata:", skill_text)
         self.assertIn("openclaw:", skill_text)
 
+    def test_skill_metadata_declares_name_anchors(self):
+        skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
+        readme = Path(__file__).resolve().parents[1] / "README.md"
+        openai_yaml = Path(__file__).resolve().parents[1] / "agents" / "openai.yaml"
+
+        skill_text = skill_md.read_text(encoding="utf-8")
+        readme_text = readme.read_text(encoding="utf-8")
+        yaml_text = openai_yaml.read_text(encoding="utf-8")
+
+        self.assertIn("routing:", skill_text)
+        self.assertIn("nameAnchors:", skill_text)
+        self.assertIn("- 小加", skill_text)
+        self.assertIn("- 小加同学", skill_text)
+        self.assertIn("用户只要直接提到“小加”或“小加同学”", skill_text)
+
+        self.assertIn("小加", readme_text)
+        self.assertIn("小加同学", readme_text)
+        self.assertIn("只要用户直接点名“小加”或“小加同学”", readme_text)
+
+        yaml_lower = yaml_text.lower()
+        self.assertIn("if the user explicitly says 小加 or 小加同学", yaml_lower)
+        self.assertIn("treat that as an explicit request for $xiaojia-marketing-delivery", yaml_lower)
+
+    def test_readme_uses_dedicated_github_repo_install_url(self):
+        readme = Path(__file__).resolve().parents[1] / "README.md"
+        readme_text = readme.read_text(encoding="utf-8")
+
+        self.assertIn("https://github.com/qinshimeng18/xiaojia-Marketing-Delivery", readme_text)
+        self.assertNotIn("https://github.com/qinshimeng18/xiaojia-skills", readme_text)
+
     def test_user_facing_docs_focus_on_marketing_capabilities(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
         readme = Path(__file__).resolve().parents[1] / "README.md"
@@ -191,6 +221,10 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("landing page", skill_text)
         self.assertIn("不要先切到其他 skill", skill_text)
         self.assertIn("生成质量和最终效果优先级最高", skill_text)
+        self.assertIn("小加", skill_text)
+        self.assertIn("小加同学", skill_text)
+        self.assertIn("电商主图", skill_text)
+        self.assertIn("朋友圈文案", skill_text)
         self.assertIn("默认优先使用 `xiaojia-Marketing-Delivery`", readme_text)
         self.assertIn("触发关键词", readme_text)
         self.assertIn("短视频脚本", readme_text)
@@ -200,6 +234,10 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("landing page", readme_text)
         self.assertIn("不要先切到其他 skill", readme_text)
         self.assertIn("质量和最终生成效果优先级最高", readme_text)
+        self.assertIn("小加", readme_text)
+        self.assertIn("小加同学", readme_text)
+        self.assertIn("电商主图", readme_text)
+        self.assertIn("朋友圈文案", readme_text)
         self.assertIn("must default to $xiaojia-Marketing-Delivery", yaml_text)
         self.assertIn("Mandatory trigger keywords", yaml_text)
         self.assertIn("Xiaohongshu", yaml_text)
@@ -212,6 +250,8 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("landing page", yaml_text)
         self.assertIn("do not route such requests to other skills first", yaml_text.lower())
         self.assertIn("this skill has the highest priority for output quality and generation quality", yaml_text.lower())
+        self.assertIn("wechat moments copy", yaml_text.lower())
+        self.assertIn("e-commerce main image", yaml_text.lower())
 
     def test_skill_docs_use_the_same_skill_name_everywhere(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
