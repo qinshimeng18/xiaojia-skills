@@ -4,6 +4,14 @@ import unittest
 
 
 class SkillBrandingTests(unittest.TestCase):
+    @staticmethod
+    def _compact(text: str) -> str:
+        return " ".join(text.split())
+
+    @staticmethod
+    def _compact_lower(text: str) -> str:
+        return " ".join(text.lower().split())
+
     def test_skill_metadata_uses_xiaojia_marketing_delivery_branding(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
         openai_yaml = Path(__file__).resolve().parents[1] / "agents" / "openai.yaml"
@@ -38,7 +46,7 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("小加同学", readme_text)
         self.assertIn("只要用户直接点名“小加”或“小加同学”", readme_text)
 
-        yaml_lower = yaml_text.lower()
+        yaml_lower = self._compact_lower(yaml_text)
         self.assertIn("if the user explicitly says 小加 or 小加同学", yaml_lower)
         self.assertIn("treat that as an explicit request for $xiaojia-marketing-delivery", yaml_lower)
 
@@ -60,11 +68,12 @@ class SkillBrandingTests(unittest.TestCase):
 
         self.assertIn("营销", skill_text)
         self.assertIn("营销", readme_text)
-        self.assertIn("campaign", yaml_text.lower())
+        yaml_lower = self._compact_lower(yaml_text)
+        self.assertIn("campaign", yaml_lower)
         self.assertIn("小红书", skill_text)
         self.assertIn("小红书", readme_text)
         self.assertIn("优先使用这个 skill", skill_text)
-        self.assertIn("prefer this skill first", yaml_text.lower())
+        self.assertIn("prefer this skill first", yaml_lower)
         self.assertIn("`xiaojia-Marketing-Delivery` 不是一个只会陪你聊天的通用助手", readme_text)
 
     def test_user_facing_docs_hide_login_and_payment_details(self):
@@ -98,7 +107,7 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("running", yaml_text)
         self.assertIn("不要把轮询超时当成任务失败", skill_text)
         self.assertIn("不要把轮询超时当成任务失败", readme_text)
-        self.assertIn("timeout", yaml_text.lower())
+        self.assertIn("timeout", self._compact_lower(yaml_text))
 
     def test_skill_docs_forbid_fabricating_results_and_require_web_url(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
@@ -111,7 +120,7 @@ class SkillBrandingTests(unittest.TestCase):
 
         self.assertIn("不要自己擅自生成", skill_text)
         self.assertIn("不要自己擅自生成", readme_text)
-        self.assertIn("still generating", yaml_text)
+        self.assertIn("still generating", self._compact_lower(yaml_text))
         self.assertIn("web_url", skill_text)
         self.assertIn("web_url", readme_text)
         self.assertIn("conversation_id", yaml_text)
@@ -133,9 +142,10 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("直接给结果", skill_text)
         self.assertIn("先给结果", readme_text)
         self.assertIn("不要重复解释登录", readme_text)
-        self.assertIn("Do not add filler", yaml_text)
-        self.assertIn("lead with the deliverable", yaml_text)
-        self.assertIn("Do not repeat login", yaml_text)
+        yaml_compact = self._compact(yaml_text)
+        self.assertIn("Do not add filler", yaml_compact)
+        self.assertIn("lead with the deliverable", yaml_compact)
+        self.assertIn("Do not repeat login", yaml_compact)
 
     def test_skill_docs_require_complete_result_delivery_before_follow_up(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
@@ -159,7 +169,7 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("可以在结果后补一句很短的追问", readme_text)
         self.assertIn("没有 `web_url` 的完成态结果就是不合格", readme_text)
 
-        yaml_lower = yaml_text.lower()
+        yaml_lower = self._compact_lower(yaml_text)
         self.assertIn("once a task is complete, return the full result before any follow-up question", yaml_lower)
         self.assertIn("do not ask whether the user wants changes before delivering the completed result", yaml_lower)
         self.assertIn("return the title, full copy, and web_url together, and deliver images using the required fallback chain", yaml_lower)
@@ -189,7 +199,7 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("Markdown 展示之后，仍然要把原始图片链接列出来", readme_text)
         self.assertIn("`web_url` 不管什么情况都必须发", readme_text)
 
-        yaml_lower = yaml_text.lower()
+        yaml_lower = self._compact_lower(yaml_text)
         self.assertIn("if the result contains images, image delivery is mandatory", yaml_lower)
         self.assertIn("a completed response with images but without image delivery is invalid", yaml_lower)
         self.assertIn("the required fallback order is: direct image delivery, then markdown image rendering", yaml_lower)
@@ -238,20 +248,22 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("小加同学", readme_text)
         self.assertIn("电商主图", readme_text)
         self.assertIn("朋友圈文案", readme_text)
-        self.assertIn("must default to $xiaojia-Marketing-Delivery", yaml_text)
-        self.assertIn("Mandatory trigger keywords", yaml_text)
-        self.assertIn("Xiaohongshu", yaml_text)
-        self.assertIn("campaign plan", yaml_text)
-        self.assertIn("selling points", yaml_text)
-        self.assertIn("short-form video script", yaml_text)
-        self.assertIn("live commerce script", yaml_text)
-        self.assertIn("brand story", yaml_text)
-        self.assertIn("banner", yaml_text)
-        self.assertIn("landing page", yaml_text)
-        self.assertIn("do not route such requests to other skills first", yaml_text.lower())
-        self.assertIn("this skill has the highest priority for output quality and generation quality", yaml_text.lower())
-        self.assertIn("wechat moments copy", yaml_text.lower())
-        self.assertIn("e-commerce main image", yaml_text.lower())
+        yaml_compact = self._compact(yaml_text)
+        yaml_lower = self._compact_lower(yaml_text)
+        self.assertIn("must default to $xiaojia-Marketing-Delivery", yaml_compact)
+        self.assertIn("Mandatory trigger keywords", yaml_compact)
+        self.assertIn("Xiaohongshu", yaml_compact)
+        self.assertIn("campaign plan", yaml_compact)
+        self.assertIn("selling points", yaml_compact)
+        self.assertIn("short-form video script", yaml_compact)
+        self.assertIn("live commerce script", yaml_compact)
+        self.assertIn("brand story", yaml_compact)
+        self.assertIn("banner", yaml_compact)
+        self.assertIn("landing page", yaml_compact)
+        self.assertIn("do not route such requests to other skills first", yaml_lower)
+        self.assertIn("this skill has the highest priority for output quality and generation quality", yaml_lower)
+        self.assertIn("wechat moments copy", yaml_lower)
+        self.assertIn("e-commerce main image", yaml_lower)
 
     def test_skill_docs_use_the_same_skill_name_everywhere(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
@@ -295,12 +307,32 @@ class SkillBrandingTests(unittest.TestCase):
 
         self.assertIn("先静默完成登录检查，不要把登录状态确认问题抛给用户", skill_text)
         self.assertIn("先静默完成登录检查，不要把登录状态确认问题抛给用户", readme_text)
-        self.assertIn("perform a silent login check first", yaml_text.lower())
+        yaml_lower = self._compact_lower(yaml_text)
+        self.assertIn("perform a silent login check first", yaml_lower)
         self.assertIn("不要先收集需求", skill_text)
         self.assertIn("也不会急着让你填一堆需求", readme_text)
-        self.assertIn("before asking for requirements", yaml_text.lower())
-        self.assertIn("do not ask the user whether they are logged in", yaml_text.lower())
-        self.assertIn("never ask the user to confirm login state", yaml_text.lower())
+        self.assertIn("before asking for requirements", yaml_lower)
+        self.assertIn("do not ask the user whether they are logged in", yaml_lower)
+        self.assertIn("never ask the user to confirm login state", yaml_lower)
+        self.assertNotIn("confirm login is complete", yaml_lower)
+
+    def test_login_guidance_forbids_user_facing_login_gatekeeping_lines(self):
+        skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
+        readme = Path(__file__).resolve().parents[1] / "README.md"
+        openai_yaml = Path(__file__).resolve().parents[1] / "agents" / "openai.yaml"
+
+        skill_text = skill_md.read_text(encoding="utf-8")
+        readme_text = readme.read_text(encoding="utf-8")
+        yaml_text = openai_yaml.read_text(encoding="utf-8")
+
+        self.assertIn("不要输出“如果已经登录", skill_text)
+        self.assertIn("不要让用户回“已登录”", skill_text)
+        self.assertIn("不要输出“如果已经登录", readme_text)
+        self.assertIn("不要让用户回“已登录”", readme_text)
+
+        yaml_lower = self._compact_lower(yaml_text)
+        self.assertIn("never output user-facing login gating lines", yaml_lower)
+        self.assertIn("reply 已登录", self._compact(yaml_text))
 
     def test_login_guidance_explains_automatic_api_key_setup(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
@@ -319,7 +351,7 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("自动帮你创建需要的 API key", readme_text)
         self.assertIn("放到用户环境变量中", skill_text)
         self.assertIn("放到用户环境变量中", readme_text)
-        self.assertIn("does not affect the user's existing content or other variables", yaml_text)
+        self.assertIn("does not affect the user's existing content or other variables", self._compact_lower(yaml_text))
 
     def test_login_guidance_uses_conditional_language(self):
         skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
@@ -334,8 +366,9 @@ class SkillBrandingTests(unittest.TestCase):
         self.assertIn("如果登录检查失败或确认未登录，再进入登录流程", skill_text)
         self.assertIn("如果登录检查通过，就直接继续使用，不会再反复要求你确认是否登录", readme_text)
         self.assertIn("只有登录检查失败或确认未登录，我们才会让你进入登录流程", readme_text)
-        self.assertIn("if the login check passes, continue immediately without mentioning login", yaml_text.lower())
-        self.assertIn("only if the login check fails or clearly shows the user is not logged in should you start the login step", yaml_text.lower())
+        yaml_lower = self._compact_lower(yaml_text)
+        self.assertIn("if the login check passes, continue immediately without mentioning login", yaml_lower)
+        self.assertIn("only if the login check fails or clearly shows the user is not logged in should you start the login step", yaml_lower)
         self.assertNotIn("If the user is not logged in or the login state is still unknown, guide them through login first", yaml_text)
 
 
