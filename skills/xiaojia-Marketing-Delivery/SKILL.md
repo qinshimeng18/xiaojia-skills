@@ -79,6 +79,7 @@ Use the bundled scripts to inspect optional context, submit the task, and fetch 
 2. `list_skills.py` 查看可选技能
 3. `chat.py` 提交任务并拿到 `conversation_id`
 4. `chat_result.py` 查询最终结果
+5. `create_skill.py` / `update_skill.py` / `get_skill.py` / `delete_skill.py` 管理 JustAI 内部 Skill，用于自动化测试准备和清理
 
 ## Workflow
 
@@ -130,6 +131,26 @@ List skills:
 
 ```bash
 python3 "${CLAUDE_SKILL_DIR}/scripts/list_skills.py"
+```
+
+Create an internal Skill:
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/scripts/create_skill.py" \
+  --name "自动化测试 Skill" \
+  --description "用于自动化测试" \
+  --prompt-file "./prompt.md" \
+  --category "note" \
+  --verify
+```
+
+Update an internal Skill:
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/scripts/update_skill.py" \
+  --skill-id "skill_xxx" \
+  --prompt-content "新的测试 prompt" \
+  --verify
 ```
 
 Run a new turn:
@@ -185,6 +206,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 - 不要让用户回“已登录”作为继续任务的前提
 - 当用户给了明确资料范围，优先使用 `project_id`
 - 当用户想用特定营销能力链路时，优先使用 `skill_id`
+- 当任务是创建、更新、验证或清理 JustAI 内部 Skill 时，使用 `create_skill.py` / `update_skill.py` / `get_skill.py` / `delete_skill.py`；这些脚本通过 OpenAPI API key 调用 `/openapi/skills/*`，不要要求用户提供 `Session-Id`
 - 返回结果时优先读 `result`，不要只读顶层 `text`
 - 如果 `chat_result.py` 还在输出 `status=running`，说明营销内容仍在生成，不能过早判断“没有图片”或“没有结果”
 - 对 `generate_notes`、`generate_image` 这类慢分支，除非用户明确要求，否则不要把 `chat_result.py --timeout` 设成小于 `300`
