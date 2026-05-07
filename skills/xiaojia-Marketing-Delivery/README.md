@@ -155,6 +155,8 @@ xiaojia-Marketing-Delivery
 ```bash
 python3 "${CLAUDE_SKILL_DIR}/scripts/list_projects.py"
 python3 "${CLAUDE_SKILL_DIR}/scripts/list_skills.py"
+python3 "${CLAUDE_SKILL_DIR}/scripts/create_skill.py" --name "自动化测试 Skill" --description "用于自动化测试" --prompt-file "./prompt.md" --category "note" --verify
+python3 "${CLAUDE_SKILL_DIR}/scripts/update_skill.py" --skill-id "skill_xxx" --prompt-content "新的测试 prompt" --verify
 python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" --message "帮我做一份护肤品牌新品营销方案"
 python3 "${CLAUDE_SKILL_DIR}/scripts/chat_result.py" --conversation-id "your-conversation-id"
 python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" --conversation-id "your-conversation-id" --message "继续扩写成适合小红书发布的图文笔记"
@@ -181,6 +183,22 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
 python3 "${CLAUDE_SKILL_DIR}/scripts/chat.py" \
   --skill-id "skill_xxx" \
   --message "使用这个营销 skill 继续生成内容"
+```
+
+创建或更新内部 Skill，用于自动化测试准备：
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/scripts/create_skill.py" \
+  --name "自动化测试 Skill" \
+  --description "用于自动化测试" \
+  --prompt-file "./prompt.md" \
+  --category "note" \
+  --verify
+
+python3 "${CLAUDE_SKILL_DIR}/scripts/update_skill.py" \
+  --skill-id "skill_xxx" \
+  --prompt-content "新的测试 prompt" \
+  --verify
 ```
 
 在确认信息卡后继续生成：

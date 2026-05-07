@@ -362,6 +362,62 @@ def open_json(request: urllib.request.Request, timeout: int) -> dict:
         raise SystemExit(1)
 
 
+def parse_bool(value: str | bool | None, field_name: str = "value") -> bool | None:
+    if value is None or value == "":
+        return None
+    if isinstance(value, bool):
+        return value
+    normalized = str(value).strip().lower()
+    if normalized in {"1", "true", "yes", "y", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "n", "off"}:
+        return False
+    raise SystemExit(f"{field_name} must be one of true/false/1/0/yes/no.")
+
+
+def resolve_prompt_content(prompt_content: str = "", prompt_file: str = "", required: bool = False) -> str:
+    prompt_content = str(prompt_content or "")
+    prompt_file = str(prompt_file or "").strip()
+    if prompt_content and prompt_file:
+        raise SystemExit("--prompt-content and --prompt-file cannot be used together.")
+    if prompt_file:
+        try:
+            prompt_content = Path(prompt_file).expanduser().read_text(encoding="utf-8")
+        except OSError as exc:
+            raise SystemExit(f"Failed to read --prompt-file: {exc}") from exc
+    if required and not prompt_content.strip():
+        raise SystemExit("--prompt-content or --prompt-file is required.")
+    return prompt_content
+
+
+def openapi_create_skill(payload: dict, timeout: int = DEFAULT_TIMEOUT) -> dict:
+    return open_json(
+        build_request("/openapi/skills/create", payload, get_api_key()),
+        timeout=timeout,
+    )
+
+
+def openapi_update_skill(payload: dict, timeout: int = DEFAULT_TIMEOUT) -> dict:
+    return open_json(
+        build_request("/openapi/skills/update", payload, get_api_key()),
+        timeout=timeout,
+    )
+
+
+def openapi_get_skill(skill_id: str, timeout: int = DEFAULT_TIMEOUT) -> dict:
+    return open_json(
+        build_request("/openapi/skills/detail", {"skill_id": skill_id}, get_api_key()),
+        timeout=timeout,
+    )
+
+
+def openapi_delete_skill(skill_id: str, timeout: int = DEFAULT_TIMEOUT) -> dict:
+    return open_json(
+        build_request("/openapi/skills/delete", {"skill_id": skill_id}, get_api_key()),
+        timeout=timeout,
+    )
+
+
 def submit_chat(
     message: str,
     conversation_id: str = "",
