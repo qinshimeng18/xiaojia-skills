@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import base64
 import json
 import os
-from pathlib import Path
 import re
 import sys
 import time
 import urllib.error
 import urllib.request
+from io import BytesIO
+from pathlib import Path
 
 
 DEFAULT_TIMEOUT = 300
 DEFAULT_REQUEST_TIMEOUT = 10
+THUMBNAIL_MAX_BYTES = 1024 * 1024
 DEFAULT_BASE_URL = "https://justailab.com"
 DEFAULT_LOGIN_POLL_INTERVAL = 2
 MARKETING_PAYMENT_URL = "https://justailab.com/pages/agent/preview"
@@ -388,6 +391,79 @@ def resolve_prompt_content(prompt_content: str = "", prompt_file: str = "", requ
     if required and not prompt_content.strip():
         raise SystemExit("--prompt-content or --prompt-file is required.")
     return prompt_content
+
+
+def build_thumbnail_upload_payload(thumbnail_file: str) -> dict:
+    thumbnail_path = Path(str(thumbnail_file or "").strip()).expanduser()
+    if not thumbnail_path.is_file():
+        raise SystemExit(f"--thumbnail-file does not exist: {thumbnail_path}")
+    try:
+        file_data = normalize_thumbnail_png(thumbnail_path)
+    except OSError as exc:
+        raise SystemExit(f"Failed to read --thumbnail-file: {exc}") from exc
+    if not file_data:
+        raise SystemExit("--thumbnail-file is empty.")
+    if len(file_data) > THUMBNAIL_MAX_BYTES:
+        raise SystemExit("--thumbnail-file could not be compressed under 1MB.")
+
+    return {
+        "file_name": f"{thumbnail_path.stem}.png",
+        "content_type": "image/png",
+        "file_data": base64.b64encode(file_data).decode("ascii"),
+    }
+
+
+def normalize_thumbnail_png(thumbnail_path: Path) -> bytes:
+    try:
+        from PIL import Image, ImageOps, UnidentifiedImageError
+    except ImportError as exc:
+        raise SystemExit("Pillow is required to compress thumbnails. Please install Pillow.") from exc
+
+    try:
+        with Image.open(thumbnail_path) as image:
+            image = ImageOps.exif_transpose(image)
+            if image.mode not in {"RGB", "RGBA"}:
+                image = image.convert("RGBA" if "A" in image.getbands() else "RGB")
+            current = image.copy()
+    except UnidentifiedImageError as exc:
+        raise SystemExit("--thumbnail-file must be a valid image file.") from exc
+
+    for _ in range(12):
+        output = BytesIO()
+        current.save(output, format="PNG", optimize=True, compress_level=9)
+        png_data = output.getvalue()
+        if len(png_data) <= THUMBNAIL_MAX_BYTES:
+            return png_data
+
+        width, height = current.size
+        if width <= 128 or height <= 128:
+            break
+        scale = max(0.6, min(0.92, (THUMBNAIL_MAX_BYTES / len(png_data)) ** 0.5 * 0.95))
+        next_size = (max(128, int(width * scale)), max(128, int(height * scale)))
+        if next_size == current.size:
+            next_size = (max(128, width - 1), max(128, height - 1))
+        current = current.resize(next_size, Image.Resampling.LANCZOS)
+
+    raise SystemExit("--thumbnail-file could not be compressed under 1MB as PNG.")
+
+
+def upload_skill_thumbnail_file(thumbnail_file: str, timeout: int = DEFAULT_TIMEOUT) -> str:
+    result = openapi_upload_skill_thumbnail(build_thumbnail_upload_payload(thumbnail_file), timeout=timeout)
+    if result.get("status") != 0:
+        message = result.get("msg") or result.get("message") or "thumbnail upload failed"
+        raise SystemExit(message)
+    data = result.get("data") or {}
+    thumbnail_url = str(data.get("thumbnail") or data.get("url") or "").strip()
+    if not thumbnail_url:
+        raise SystemExit("thumbnail upload did not return a URL.")
+    return thumbnail_url
+
+
+def openapi_upload_skill_thumbnail(payload: dict, timeout: int = DEFAULT_TIMEOUT) -> dict:
+    return open_json(
+        build_request("/openapi/skills/upload_thumbnail", payload, get_api_key()),
+        timeout=timeout,
+    )
 
 
 def openapi_create_skill(payload: dict, timeout: int = DEFAULT_TIMEOUT) -> dict:

@@ -80,6 +80,7 @@ Use the bundled scripts to inspect optional context, submit the task, and fetch 
 3. `chat.py` 提交任务并拿到 `conversation_id`
 4. `chat_result.py` 查询最终结果
 5. `create_skill.py` / `update_skill.py` / `get_skill.py` / `delete_skill.py` 管理 JustAI 内部 Skill，用于自动化测试准备和清理
+6. `upload_skill_thumbnail.py` 上传本地封面图并返回可写入 `thumbnail` 的 COS URL
 
 ## Workflow
 
@@ -142,6 +143,26 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/create_skill.py" \
   --description "用于自动化测试" \
   --prompt-file "./prompt.md" \
   --category "note" \
+  --verify
+```
+
+Upload a local Skill thumbnail:
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/scripts/upload_skill_thumbnail.py" \
+  --file "./thumbnail.png"
+```
+
+The script converts the local image to optimized PNG and keeps the upload under 1MB.
+
+Create an internal Skill with a local thumbnail:
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/scripts/create_skill.py" \
+  --name "自动化测试 Skill" \
+  --description "用于自动化测试" \
+  --prompt-file "./prompt.md" \
+  --thumbnail-file "./thumbnail.png" \
   --verify
 ```
 

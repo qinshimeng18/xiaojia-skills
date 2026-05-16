@@ -8,6 +8,7 @@ from _common import (
     openapi_get_skill,
     parse_bool,
     resolve_prompt_content,
+    upload_skill_thumbnail_file,
 )
 
 
@@ -21,8 +22,15 @@ def build_payload(args) -> dict:
             required=True,
         ),
     }
+    if args.thumbnail and args.thumbnail_file:
+        raise SystemExit("--thumbnail and --thumbnail-file cannot be used together.")
+
+    thumbnail = args.thumbnail
+    if args.thumbnail_file:
+        thumbnail = upload_skill_thumbnail_file(args.thumbnail_file, timeout=args.timeout)
+
     optional_fields = {
-        "thumbnail": args.thumbnail,
+        "thumbnail": thumbnail,
         "category": args.category,
         "keywords": args.keywords,
         "market_status": args.market_status,
@@ -51,6 +59,7 @@ def main() -> int:
     parser.add_argument("--prompt-content", default="", help="Skill prompt content.")
     parser.add_argument("--prompt-file", default="", help="Read skill prompt content from a UTF-8 file.")
     parser.add_argument("--thumbnail", default="", help="Optional thumbnail URL.")
+    parser.add_argument("--thumbnail-file", default="", help="Upload a local thumbnail image and use its COS URL.")
     parser.add_argument("--category", default="", help="Optional category, such as note/article/ppt.")
     parser.add_argument("--keywords", default="", help="Optional comma-separated keywords.")
     parser.add_argument("--market-status", default="", help="Optional market status: off/listed.")
