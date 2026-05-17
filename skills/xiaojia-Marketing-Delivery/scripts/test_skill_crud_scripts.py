@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import base64
 import json
 import os
 from pathlib import Path
@@ -7,6 +8,8 @@ import sys
 from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
+
+from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -37,6 +40,7 @@ class SkillCrudScriptTests(unittest.TestCase):
             prompt_content="prompt",
             prompt_file="",
             thumbnail="",
+            thumbnail_file="",
             category="note",
             keywords="测试,skill",
             market_status="off",
@@ -45,6 +49,7 @@ class SkillCrudScriptTests(unittest.TestCase):
             applicable_stage=["free_chat"],
             priority=12,
             enabled="true",
+            timeout=300,
         )
 
         payload = create_skill.build_payload(args)
@@ -56,6 +61,66 @@ class SkillCrudScriptTests(unittest.TestCase):
         self.assertEqual(payload["priority"], 12)
         self.assertTrue(payload["enabled"])
         self.assertFalse(payload["market_prompt_visible"])
+
+    def test_create_skill_builds_payload_with_thumbnail_file(self):
+        args = SimpleNamespace(
+            name="自动化测试",
+            description="desc",
+            prompt_content="prompt",
+            prompt_file="",
+            thumbnail="",
+            thumbnail_file="./thumbnail.png",
+            category="",
+            keywords="",
+            market_status="",
+            market_prompt_visible="",
+            load_strategy="",
+            applicable_stage=[],
+            priority=None,
+            enabled="",
+            timeout=123,
+        )
+
+        with patch.object(create_skill, "upload_skill_thumbnail_file", return_value="https://cos.example/thumb.png") as upload_mock:
+            payload = create_skill.build_payload(args)
+
+        upload_mock.assert_called_once_with("./thumbnail.png", timeout=123)
+        self.assertEqual(payload["thumbnail"], "https://cos.example/thumb.png")
+
+    def test_create_skill_rejects_two_thumbnail_sources(self):
+        args = SimpleNamespace(
+            name="自动化测试",
+            description="desc",
+            prompt_content="prompt",
+            prompt_file="",
+            thumbnail="https://example.com/thumb.png",
+            thumbnail_file="./thumbnail.png",
+            category="",
+            keywords="",
+            market_status="",
+            market_prompt_visible="",
+            load_strategy="",
+            applicable_stage=[],
+            priority=None,
+            enabled="",
+            timeout=123,
+        )
+
+        with self.assertRaises(SystemExit):
+            create_skill.build_payload(args)
+
+    def test_build_thumbnail_upload_payload_reads_local_file(self):
+        with TemporaryDirectory() as tmp_dir:
+            thumbnail_path = Path(tmp_dir) / "thumb.png"
+            Image.new("RGB", (8, 8), color=(255, 0, 0)).save(thumbnail_path)
+
+            payload = _common.build_thumbnail_upload_payload(str(thumbnail_path))
+
+        self.assertEqual(payload["file_name"], "thumb.png")
+        self.assertEqual(payload["content_type"], "image/png")
+        decoded = base64.b64decode(payload["file_data"])
+        self.assertLessEqual(len(decoded), _common.THUMBNAIL_MAX_BYTES)
+        self.assertTrue(decoded.startswith(b"\x89PNG\r\n\x1a\n"))
 
     def test_update_skill_requires_a_field_besides_skill_id(self):
         args = SimpleNamespace(
@@ -132,22 +197,24 @@ class SkillCrudScriptTests(unittest.TestCase):
             clear=True,
         ), patch.object(_common, "open_json", side_effect=fake_open_json):
             _common.openapi_create_skill({"name": "n"}, timeout=11)
-            _common.openapi_update_skill({"skill_id": "skill_x"}, timeout=12)
-            _common.openapi_get_skill("skill_x", timeout=13)
-            _common.openapi_delete_skill("skill_x", timeout=14)
+            _common.openapi_upload_skill_thumbnail({"file_name": "thumb.png"}, timeout=12)
+            _common.openapi_update_skill({"skill_id": "skill_x"}, timeout=13)
+            _common.openapi_get_skill("skill_x", timeout=14)
+            _common.openapi_delete_skill("skill_x", timeout=15)
 
         self.assertEqual(
             [item["url"] for item in captured],
             [
                 "https://example.com/openapi/skills/create",
+                "https://example.com/openapi/skills/upload_thumbnail",
                 "https://example.com/openapi/skills/update",
                 "https://example.com/openapi/skills/detail",
                 "https://example.com/openapi/skills/delete",
             ],
         )
         self.assertEqual(captured[0]["authorization"], "Bearer demo-key")
-        self.assertEqual(captured[2]["body"], {"skill_id": "skill_x"})
-        self.assertEqual([item["timeout"] for item in captured], [11, 12, 13, 14])
+        self.assertEqual(captured[3]["body"], {"skill_id": "skill_x"})
+        self.assertEqual([item["timeout"] for item in captured], [11, 12, 13, 14, 15])
 
 
 if __name__ == "__main__":
